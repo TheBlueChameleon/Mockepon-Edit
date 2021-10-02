@@ -1,39 +1,77 @@
 package gfxStockManager;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.net.URL;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTree;
+import javax.swing.tree.DefaultMutableTreeNode;
 
+import cogs.Constants;
+
+// ========================================================================== //
 
 public class GfxStockManager extends JFrame implements ActionListener, WindowListener {
-
 	static final long serialVersionUID = 1L;
 
-	JLabel dummy;
 	JButton parentButton = null;
+
+	JTree  tree;
+	JPanel pnlCenter;
+	JPanel pnlButtons;
+	
+	JLabel statusbar;
 	
 	// ====================================================================== //
 	
 	public GfxStockManager(JButton parent)  {
 		this.parentButton = parent;
-		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
+		this.setTitle("Mockepon Gfx Stock Manager");
+		this.setPreferredSize(new Dimension(800, 600));
+		this.setIconImage(Constants.PROJECT_ICON.getImage());
+		
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.addWindowListener(this);
 		
 		// .................................................................. //
-		// obj
+		// tree
 		
-		dummy = new JLabel("dummy text");
+		DefaultMutableTreeNode top = new DefaultMutableTreeNode("The Java Series");
+		createNodes(top);
+		tree = new JTree(top);
 		
+		// .................................................................. //
+		// panels
+		
+		pnlButtons = new JPanel();
+		pnlButtons.setBackground(Color.black);
+		pnlCenter  = new JPanel();
+		pnlCenter.setBackground(Color.blue);
+		
+		// .................................................................. //
+		// status bar
+
+		statusbar = new JLabel("Version " + Constants.VERSION_MAJOR + "." + Constants.VERSION_MINOR);
+		// statusText.setBackground(Color.gray);
+		statusbar.setOpaque(true);
+
 		// .................................................................. //
 		// packing
 		
-		this.add(dummy);
+		this.add(tree      , BorderLayout.WEST);
+		this.add(pnlCenter , BorderLayout.CENTER);
+		this.add(pnlButtons, BorderLayout.EAST);
+		this.add(statusbar , BorderLayout.SOUTH);
 		this.pack();
 		
 		this.setVisible(true);
@@ -43,7 +81,7 @@ public class GfxStockManager extends JFrame implements ActionListener, WindowLis
 	// WindowListener
 
 	@Override
-	public void windowClosing(WindowEvent arg0) {parentButton.setEnabled(true);}
+	public void windowClosing(WindowEvent arg0) {if (parentButton != null) {parentButton.setEnabled(true);}}
 	
 	@Override
 	public void windowActivated(WindowEvent arg0) {}
@@ -72,4 +110,52 @@ public class GfxStockManager extends JFrame implements ActionListener, WindowLis
 
 	}
 
+	// ====================================================================== //
+	// Tree
+	
+	private void createNodes(DefaultMutableTreeNode top) {
+        DefaultMutableTreeNode category = null;
+        DefaultMutableTreeNode book = null;
+
+        category = new DefaultMutableTreeNode("Books for Java Programmers");
+        top.add(category);
+
+        //original Tutorial
+        book = new DefaultMutableTreeNode("The Java Tutorial: A Short Course on the Basics");
+        category.add(book);
+
+        //Tutorial Continued
+        book = new DefaultMutableTreeNode("The Java Tutorial Continued: The Rest of the JDK");
+        category.add(book);
+
+        //JFC Swing Tutorial
+        book = new DefaultMutableTreeNode("The JFC Swing Tutorial: A Guide to Constructing GUIs");
+        category.add(book);
+
+        //Bloch
+        book = new DefaultMutableTreeNode("Effective Java Programming Language Guide");
+        category.add(book);
+
+        //Arnold/Gosling
+        book = new DefaultMutableTreeNode("The Java Programming Language");
+        category.add(book);
+
+        //Chan
+        book = new DefaultMutableTreeNode("The Java Developers Almanac");
+        category.add(book);
+
+        category = new DefaultMutableTreeNode("Books for Java Implementers");
+        top.add(category);
+
+        //VM
+        book = new DefaultMutableTreeNode("The Java Virtual Machine Specification");
+        category.add(book);
+
+        //Language Spec
+        book = new DefaultMutableTreeNode("The Java Language Specification");
+        category.add(book);
+    }
+
 }
+
+

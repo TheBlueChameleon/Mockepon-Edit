@@ -15,17 +15,17 @@ import javax.swing.JPanel;
 import cogs.*;
 import gfxStockManager.GfxStockManager;
 
+// ========================================================================== //
+
 public class LaunchWindow extends JFrame implements ActionListener {
 	static final long serialVersionUID = 0L;
-	
-	JPanel statusbar;
-	JPanel content;
-	
-	JLabel statusText;
 	
 	JButton btnGfxStockManager;
 	JButton btnAnimationManager;
 	JButton btnTileManager;
+	
+	JPanel content;
+	JLabel statusbar;
 	
 	// ====================================================================== //
 	
@@ -33,9 +33,11 @@ public class LaunchWindow extends JFrame implements ActionListener {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		this.setTitle("Mockepon World Creator");
-		this.setLocation(30, 30);
+		this.setLocation(300, 300);
 		
-		this.setPreferredSize(new Dimension(800, 600));
+		this.setPreferredSize(new Dimension(400, 300));
+		//this.setIconImage(Constants.PROJECT_ICON);
+		this.setIconImage(Constants.PROJECT_ICON.getImage());
 		
 		// .................................................................. //
 		// buttons
@@ -50,30 +52,23 @@ public class LaunchWindow extends JFrame implements ActionListener {
 		btnTileManager.addActionListener(this);
 		
 		// .................................................................. //
-		// content pane
+		// content panel
 		
 		content = new JPanel();
 		content.setBackground(Color.white);
-		content.setPreferredSize(new Dimension(20, 20));
+
+		content.setLayout(new GridLayout(9,1));
 		
 		content.add(btnGfxStockManager);
 		content.add(btnAnimationManager);
 		content.add(btnTileManager);
 		
-		content.setLayout(new GridLayout(9,1));
-		
 		// .................................................................. //
-		// status pane
+		// status bar
 		
-		statusText = new JLabel("Version " + Constants.VERSION_MAJOR + "." + Constants.VERSION_MINOR);
-		
-		statusbar = new JPanel();
-		statusbar.setPreferredSize(new Dimension(20, 20));
+		statusbar = new JLabel("Version " + Constants.VERSION_MAJOR + "." + Constants.VERSION_MINOR);
+		// statusText.setBackground(Color.gray);
 		statusbar.setOpaque(true);
-		//statusbar.setBackground(Color.gray);
-		statusbar.setLayout(new BorderLayout());
-		
-		statusbar.add(statusText);
 		
 		// .................................................................. //
 		// packing
