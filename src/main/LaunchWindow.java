@@ -76,8 +76,10 @@ public class LaunchWindow extends JFrame implements ActionListener {
 		this.add(content  , BorderLayout.CENTER);
 		this.add(statusbar, BorderLayout.SOUTH);
 	    this.pack();
-		
-		this.setVisible(true);
+	    
+	    /* no setVisible to true: dialog remains hidden until RuntimeGlobals is prepared, but needs to be
+	     * ready before that so the ImageIcon is available for dialogs.
+	     */
 	}
 	
 	// ====================================================================== //
@@ -92,5 +94,4 @@ public class LaunchWindow extends JFrame implements ActionListener {
 			btnGfxStockManager.setEnabled(false);
 		}
 	}
-
 }

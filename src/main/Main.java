@@ -2,11 +2,16 @@ package main;
 
 import java.io.File;
 
-import gfxStockManager.GfxStockManager;
+import javax.swing.JOptionPane;
+
+import cogs.Constants;
+import cogs.RuntimeGlobals;
 
 // ========================================================================== //
 
 public class Main {
+	public static LaunchWindow mainWin = null;
+	
 	public static void main(String[] args) {
 		/* TODO
 		 * settings file
@@ -15,18 +20,48 @@ public class Main {
 		 * button unpack project into..
 		 */
 		
-		guaranteeSubfolderStructure();
+		mainWin = new LaunchWindow();	
+
+		RuntimeGlobals.init();
+		mainWin.setVisible(true);
 		
-		//new LaunchWindow();
-		new GfxStockManager(null);
+//		guaranteeSubfolderStructure();
+		System.out.println( "CWD: " + RuntimeGlobals.workingDirectory );
+		
+		
+//		new GfxStockManager(null);
 	}
 
 	// ====================================================================== //
 	
 	static void guaranteeSubfolderStructure() {
-		System.out.println("TODO: subfolders");
+		File directory = new File(RuntimeGlobals.workingDirectory);
 		
-	    File directory = new File("./gfx/");
+		if (!directory.exists()) {
+			//JOptionPane.showMessageDialog(null, "msg", Constants.PROJECT_NAME, JOptionPane.WARNING_MESSAGE);
+			int createFlag = JOptionPane.showOptionDialog(
+					null,
+					"The indicated project path '" +
+							RuntimeGlobals.workingDirectory +
+							"' does not exist.\n" + 
+							"Create?",
+					Constants.PROJECT_NAME,
+					JOptionPane.YES_NO_OPTION,
+					JOptionPane.QUESTION_MESSAGE,
+					null,
+					null,
+					null
+					);
+			
+			if (createFlag != 0) {
+				// TODO invoke path selector
+				System.err.println("aborted due to nonexistent project directory");
+				System.exit(-1);
+			}
+		}
+		
+//		String dirGfx = RuntimeGlobals.workingDirectory;
+		
 	    if (!directory.exists()) { directory.mkdir(); }
 
 	}

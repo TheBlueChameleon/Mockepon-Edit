@@ -10,5 +10,7 @@ public final class Constants {
 	
 	public static final String PROJECT_NAME = "Mockepon";
 	
+	public static final String INI_FILE = "./settings.ini";
+	
 	public static final ImageIcon PROJECT_ICON = new ImageIcon("./ico/ProjectIcon.png");
 }
