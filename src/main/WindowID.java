@@ -1,7 +1,8 @@
 package main;
 
-public enum ComponentWindows {
+public enum WindowID {
 	GfxStockManager,
 	AnimationManager,
+	TileManager,
 	OptionsWindow,
 }

@@ -18,7 +18,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import main.ComponentWindows;
+import main.WindowID;
 import main.Constants;
 import main.IComponentWindow;
 import main.Main;
@@ -30,7 +30,7 @@ import main.RuntimeGlobals;
 public class OptionsWindow extends JFrame implements IComponentWindow, ActionListener, WindowListener {
 	static final long serialVersionUID = 3L;
 	
-	static final ComponentWindows selfID = ComponentWindows.OptionsWindow;
+	static final WindowID selfID = WindowID.OptionsWindow;
 	
 	boolean changed = false;
 	
@@ -152,7 +152,7 @@ public class OptionsWindow extends JFrame implements IComponentWindow, ActionLis
 			updateRuntimeGlobals();
 			RuntimeGlobals.writeIni();
 			changed = false;
-			Main.mainWin.closeWindow(selfID);
+			Main.mainWin.shutdown(false);
 			
 		} else if (e.getSource() == btnCancel) {
 			changed = false;

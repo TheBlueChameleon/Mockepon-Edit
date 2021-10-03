@@ -17,7 +17,7 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
-import main.ComponentWindows;
+import main.WindowID;
 import main.Constants;
 import main.IComponentWindow;
 import main.Main;
@@ -28,7 +28,7 @@ import main.RuntimeGlobals;
 public class GfxStockManager extends JFrame implements ActionListener, WindowListener, IComponentWindow {
 	static final long serialVersionUID = 1L;
 
-	static final ComponentWindows selfID = ComponentWindows.GfxStockManager;
+	static final WindowID selfID = WindowID.GfxStockManager;
 	
 	JTree       tree;
 	JScrollPane scrTree;
@@ -89,7 +89,7 @@ public class GfxStockManager extends JFrame implements ActionListener, WindowLis
 	// WindowListener
 
 	@Override
-	public void windowClosing(WindowEvent arg0) {Main.mainWin.closeWindow(selfID); Main.mainWin.shutdown();}
+	public void windowClosing(WindowEvent arg0) {Main.mainWin.closeWindow(selfID); Main.mainWin.shutdown(true);}
 	
 	@Override
 	public void windowActivated(WindowEvent arg0) {}

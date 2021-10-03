@@ -16,7 +16,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import gfxStockManager.GfxStockManager;
-import main.ComponentWindows;
+import main.WindowID;
 import main.Constants;
 import main.IComponentWindow;
 import main.Main;
@@ -26,14 +26,11 @@ import optionsWindow.OptionsWindow;
 
 public class LaunchWindow extends JFrame implements ActionListener, WindowListener  {
 	static final long serialVersionUID = 0L;
+	static final int numberOfButtons = WindowID.values().length;
 	
-	IComponentWindow[] openWindows = new IComponentWindow[ComponentWindows.values().length];
+	IComponentWindow[] winsOpened = new IComponentWindow[numberOfButtons];
 	
-	JButton btnGfxStockManager;
-	JButton btnAnimationManager;
-	JButton btnTileManager;
-	
-	JButton btnOptions;
+	JButton[] btnsWins = new JButton[numberOfButtons];
 	
 	JPanel content;
 	JLabel statusbar;
@@ -44,46 +41,41 @@ public class LaunchWindow extends JFrame implements ActionListener, WindowListen
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.addWindowListener(this);
 		
-		this.setTitle("Mockepon World Creator");
-		this.setLocation(300, 300);
+		this.setTitle(Constants.PROJECT_NAME + " World Creator");
+		this.setLocation(50, 30);
 		this.setPreferredSize(new Dimension(400, 300));
 		this.setIconImage(Constants.PROJECT_ICON.getImage());
 		
 		// .................................................................. //
 		// buttons
 		
-		btnGfxStockManager = new JButton("Launch Gfx Stock Magager");
-		btnGfxStockManager.setIcon( Constants.getScaledIcon(Constants.GFX_ICON, 20, 20) );
-		btnGfxStockManager.addActionListener(this);
+		btnsWins[WindowID.GfxStockManager.ordinal()] = new JButton("Launch Gfx Stock Magager");
+		btnsWins[WindowID.GfxStockManager.ordinal()].setIcon( Constants.getScaledIcon(Constants.GFX_ICON, 20, 20) );
+		btnsWins[WindowID.GfxStockManager.ordinal()].addActionListener(this);
 		
-		btnAnimationManager = new JButton("Launch Animation Magager");
-		btnAnimationManager.setIcon( Constants.getScaledIcon(Constants.ANI_ICON, 20, 20) );
-		btnAnimationManager.addActionListener(this);
+		btnsWins[WindowID.AnimationManager.ordinal()] = new JButton("Launch Animation Magager");
+		btnsWins[WindowID.AnimationManager.ordinal()].setIcon( Constants.getScaledIcon(Constants.ANI_ICON, 20, 20) );
+		btnsWins[WindowID.AnimationManager.ordinal()].addActionListener(this);
 		
-		btnTileManager = new JButton("Launch Tile Magager");
-		btnTileManager.addActionListener(this);
+		btnsWins[WindowID.TileManager.ordinal()] = new JButton("Launch Tile Magager");
+		btnsWins[WindowID.TileManager.ordinal()].addActionListener(this);
 		
-		btnOptions = new JButton("Options");
-		btnOptions.addActionListener(this);
+		btnsWins[WindowID.OptionsWindow.ordinal()] = new JButton("Options");
+		btnsWins[WindowID.OptionsWindow.ordinal()].addActionListener(this);
 		
 		// .................................................................. //
 		// content panel
 		
 		content = new JPanel();
+		content.setLayout(new GridLayout(numberOfButtons,1));
 		content.setBackground(Color.white);
-
-		content.setLayout(new GridLayout(9,1));
 		
-		content.add(btnGfxStockManager);
-		content.add(btnAnimationManager);
-		content.add(btnTileManager);
-		content.add(btnOptions);
+		for (int i = 0; i < numberOfButtons; ++i) { content.add(btnsWins[i]); }
 		
 		// .................................................................. //
 		// status bar
 		
 		statusbar = new JLabel("Version " + Constants.VERSION_MAJOR + "." + Constants.VERSION_MINOR);
-		// statusText.setBackground(Color.gray);
 		statusbar.setOpaque(true);
 		
 		// .................................................................. //
@@ -102,7 +94,7 @@ public class LaunchWindow extends JFrame implements ActionListener, WindowListen
 	// WindowListener
 
 	@Override
-	public void windowClosing(WindowEvent arg0) { shutdown(); }
+	public void windowClosing(WindowEvent arg0) { shutdown(true); }
 	
 	@Override
 	public void windowActivated(WindowEvent arg0) {}
@@ -129,75 +121,69 @@ public class LaunchWindow extends JFrame implements ActionListener, WindowListen
 	public void actionPerformed(ActionEvent e) {
 		System.out.println( e.toString() );
 		
-		if      (e.getSource() == btnGfxStockManager ) { openWindow(ComponentWindows.GfxStockManager); }
-		else if (e.getSource() == btnAnimationManager) { openWindow(ComponentWindows.AnimationManager); }
-		else if (e.getSource() == btnOptions         ) { openWindow(ComponentWindows.OptionsWindow); }
+		for (WindowID win : WindowID.values()) {
+			if (e.getSource() == btnsWins[win.ordinal()] ) {
+				openWindow(win);
+				System.out.println(win.name());
+			}
+		}
 	}
 	
 	// ====================================================================== //
 	// Window management
 	
-	public void openWindow (ComponentWindows ID) {
+	public void openWindow (WindowID ID) {
+		btnsWins[ID.ordinal()].setEnabled(false);
+		
 		switch (ID) {
 		case GfxStockManager :
-			btnGfxStockManager.setEnabled(false);
-			openWindows[ID.ordinal()] = new GfxStockManager();
+			winsOpened[ID.ordinal()] = new GfxStockManager();
 			break;
 			
 		case AnimationManager :
 			break;
 			
-		
 		case OptionsWindow :
-			btnOptions.setEnabled(false);
-			openWindows[ID.ordinal()] = new OptionsWindow();
+			winsOpened[ID.ordinal()] = new OptionsWindow();
 			break;
 			
 		default:
 			JOptionPane.showMessageDialog(
 					Main.mainWin,
-					"An invalid state of memory was detected. Terminating Execution:\n" +
-							"Attempted to open invalid Window ID",
+					"Option not yet implemented\n",
 					Constants.PROJECT_NAME,
-					JOptionPane.ERROR_MESSAGE
+					JOptionPane.WARNING_MESSAGE
 					);
-			System.exit(-1);
 		}
 	}
 	
 	// ...................................................................... //
 	
-	public void closeWindow (ComponentWindows ID) {
-		switch (ID) {
-		case GfxStockManager :
-			btnGfxStockManager.setEnabled(true);
-			
-		case AnimationManager :
-			
-		case OptionsWindow :
-			btnOptions.setEnabled(true);
-			
-		default:
-			
-		}
-
-		openWindows[ID.ordinal()].preCloseActions();
-		openWindows[ID.ordinal()].dispose();
-		openWindows[ID.ordinal()] = null;
+	public void closeWindow (WindowID ID) {
+		winsOpened[ID.ordinal()].preCloseActions();
+		winsOpened[ID.ordinal()].dispose();
+		winsOpened[ID.ordinal()] = null;
+		
+		btnsWins[ID.ordinal()].setEnabled(true);
 	}
 	
 	// ---------------------------------------------------------------------- //
 	
-	public void shutdown () {
-		for (IComponentWindow win : openWindows) {
+	public void shutdown (boolean terminate) {
+		for (WindowID winID : WindowID.values()) {
+			IComponentWindow win = winsOpened[winID.ordinal()];
 			if (win != null) {
 				win.preCloseActions();
 				win.dispose();
+				winsOpened[winID.ordinal()] = null;
+				btnsWins [winID.ordinal()].setEnabled(true);;
 			}
 		}
-		this.dispose();
 		
-		System.exit(0);
+		if (terminate) {
+			this.dispose();
+			System.exit(0);
+		}
 		
 	}
 }
