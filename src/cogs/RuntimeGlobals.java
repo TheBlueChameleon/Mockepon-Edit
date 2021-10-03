@@ -53,18 +53,14 @@ public class RuntimeGlobals {
 	        	System.exit(-1);
 	        }
 
-	        /* JFileChooser returns filename "." if a directory is to be selected -- remove last character
-	         * Since we tested the return value of showOpenDialog(), the string is guaranteed to be non-null.
-	         */
 			workingDirectory = dlgDirectory.getSelectedFile().toString();
-			workingDirectory = workingDirectory.substring(0, workingDirectory.length() - 1);
 			triggerWrite = true;
 			
 			
 		} else {
 			workingDirectory = ini.get("project", "directory");
 			if (workingDirectory == null) {
-				workingDirectory = "./";
+				workingDirectory = "./project";
 				triggerWrite = true;
 			}
 		}

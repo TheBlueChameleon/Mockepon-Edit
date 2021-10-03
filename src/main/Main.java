@@ -23,11 +23,9 @@ public class Main {
 		mainWin = new LaunchWindow();	
 
 		RuntimeGlobals.init();
+		guaranteeSubfolderStructure();
+		
 		mainWin.setVisible(true);
-		
-//		guaranteeSubfolderStructure();
-		System.out.println( "CWD: " + RuntimeGlobals.workingDirectory );
-		
 		
 //		new GfxStockManager(null);
 	}
@@ -36,11 +34,12 @@ public class Main {
 	
 	static void guaranteeSubfolderStructure() {
 		File directory = new File(RuntimeGlobals.workingDirectory);
+		File directorySub;
 		
 		if (!directory.exists()) {
 			//JOptionPane.showMessageDialog(null, "msg", Constants.PROJECT_NAME, JOptionPane.WARNING_MESSAGE);
 			int createFlag = JOptionPane.showOptionDialog(
-					null,
+					mainWin,
 					"The indicated project path '" +
 							RuntimeGlobals.workingDirectory +
 							"' does not exist.\n" + 
@@ -54,15 +53,22 @@ public class Main {
 					);
 			
 			if (createFlag != 0) {
-				// TODO invoke path selector
-				System.err.println("aborted due to nonexistent project directory");
+				JOptionPane.showMessageDialog(
+						Main.mainWin,
+						"Please review your settings file.\n" + 
+								"A project directory must be created.",
+						Constants.PROJECT_NAME,
+						JOptionPane.ERROR_MESSAGE
+						);
 				System.exit(-1);
 			}
 		}
+		if (!directory.exists()) { directory.mkdir(); }
 		
-//		String dirGfx = RuntimeGlobals.workingDirectory;
+		directorySub = new File(directory, "gfx");
+		if (!directorySub.exists()) { directorySub.mkdir(); }
 		
-	    if (!directory.exists()) { directory.mkdir(); }
-
+		directorySub = new File(directory, "ani");
+		if (!directorySub.exists()) { directorySub.mkdir(); }
 	}
 }

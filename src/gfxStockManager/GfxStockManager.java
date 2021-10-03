@@ -7,9 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.net.URL;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -17,13 +15,13 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import cogs.Constants;
+import main.ComponentWindows;
+import main.Main;
 
 // ========================================================================== //
 
 public class GfxStockManager extends JFrame implements ActionListener, WindowListener {
 	static final long serialVersionUID = 1L;
-
-	JButton parentButton = null;
 
 	JTree  tree;
 	JPanel pnlCenter;
@@ -33,14 +31,12 @@ public class GfxStockManager extends JFrame implements ActionListener, WindowLis
 	
 	// ====================================================================== //
 	
-	public GfxStockManager(JButton parent)  {
-		this.parentButton = parent;
-
+	public GfxStockManager()  {
 		this.setTitle("Mockepon Gfx Stock Manager");
 		this.setPreferredSize(new Dimension(800, 600));
 		this.setIconImage(Constants.PROJECT_ICON.getImage());
 		
-		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.addWindowListener(this);
 		
 		// .................................................................. //
@@ -81,7 +77,9 @@ public class GfxStockManager extends JFrame implements ActionListener, WindowLis
 	// WindowListener
 
 	@Override
-	public void windowClosing(WindowEvent arg0) {if (parentButton != null) {parentButton.setEnabled(true);}}
+	public void windowClosing(WindowEvent arg0) {
+		Main.mainWin.closeWindow(ComponentWindows.GfxStockManager);
+	}
 	
 	@Override
 	public void windowActivated(WindowEvent arg0) {}

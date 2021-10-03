@@ -10,15 +10,18 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import cogs.*;
+import cogs.Constants;
 import gfxStockManager.GfxStockManager;
 
 // ========================================================================== //
 
 public class LaunchWindow extends JFrame implements ActionListener {
 	static final long serialVersionUID = 0L;
+	
+	JFrame[] openWindows = new JFrame[ComponentWindows.Count.ordinal()];
 	
 	JButton btnGfxStockManager;
 	JButton btnAnimationManager;
@@ -43,9 +46,11 @@ public class LaunchWindow extends JFrame implements ActionListener {
 		// buttons
 		
 		btnGfxStockManager = new JButton("Launch Gfx Stock Magager");
+		btnGfxStockManager.setIcon( Constants.getScaledIcon(Constants.GFX_ICON, 20, 20) );
 		btnGfxStockManager.addActionListener(this);
 		
 		btnAnimationManager = new JButton("Launch Animation Magager");
+		btnAnimationManager.setIcon( Constants.getScaledIcon(Constants.ANI_ICON, 20, 20) );
 		btnAnimationManager.addActionListener(this);
 		
 		btnTileManager = new JButton("Launch Tile Magager");
@@ -89,9 +94,49 @@ public class LaunchWindow extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		System.out.println( e.toString() );
 		
-		if (e.getSource() == btnGfxStockManager) {
-			new GfxStockManager(btnGfxStockManager);
+		if      (e.getSource() == btnGfxStockManager ) { openWindow(ComponentWindows.GfxStockManager); }
+		else if (e.getSource() == btnAnimationManager) { openWindow(ComponentWindows.AnimationManager); }
+	}
+	
+	// ====================================================================== //
+	// Window management
+	
+	public void openWindow (ComponentWindows ID) {
+		switch (ID) {
+		case GfxStockManager :
 			btnGfxStockManager.setEnabled(false);
+			openWindows[ID.ordinal()] = new GfxStockManager();
+			break;
+			
+		case AnimationManager :
+			break;
+			
+		default:
+			JOptionPane.showMessageDialog(
+					Main.mainWin,
+					"An invalid state of memory was detected. Terminating Execution:\n" +
+							"Attempted to open invalid Window ID",
+					Constants.PROJECT_NAME,
+					JOptionPane.ERROR_MESSAGE
+					);
+			System.exit(-1);
 		}
+	}
+	
+	// ...................................................................... //
+	
+	public void closeWindow (ComponentWindows ID) {
+		switch (ID) {
+		case GfxStockManager :
+			btnGfxStockManager.setEnabled(true);
+			
+		case AnimationManager :
+			
+		default:
+			
+		}
+
+		openWindows[ID.ordinal()].dispose();
+		openWindows[ID.ordinal()] = null;
 	}
 }
