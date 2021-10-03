@@ -24,6 +24,9 @@ import main.IComponentWindow;
 import main.Main;
 import main.RuntimeGlobals;
 
+//========================================================================== //
+
+
 public class OptionsWindow extends JFrame implements IComponentWindow, ActionListener, WindowListener {
 	static final long serialVersionUID = 3L;
 	
@@ -156,6 +159,7 @@ public class OptionsWindow extends JFrame implements IComponentWindow, ActionLis
 			Main.mainWin.closeWindow(selfID);
 			
 		} else if (e.getSource() == btnReset) {
+			resetFields();
 			
 		} else if (e.getSource() == btnWorkingDirectory) {
 			pickNewPath();
@@ -183,7 +187,17 @@ public class OptionsWindow extends JFrame implements IComponentWindow, ActionLis
 	// ====================================================================== //
 	// Internal Logic
 	
-	void updateRuntimeGlobals() {}
+	void updateRuntimeGlobals() {
+		RuntimeGlobals.workingDirectory = txtWorkingDirectory.getText(); 
+	}
+	
+	// ...................................................................... //
+	
+	void resetFields () {
+		txtWorkingDirectory.setText( RuntimeGlobals.workingDirectory );
+	}
+	
+	// ---------------------------------------------------------------------- //
 	
 	void pickNewPath() {
 		JFileChooser dlgDirectory = new JFileChooser();

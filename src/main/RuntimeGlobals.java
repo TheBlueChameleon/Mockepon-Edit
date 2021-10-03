@@ -72,7 +72,6 @@ public class RuntimeGlobals {
 	// .................................................................. //
 	
 	public static void writeIni() {
-		System.out.println("in writer");
 		FileWriter hFile;
 		
 		try {
