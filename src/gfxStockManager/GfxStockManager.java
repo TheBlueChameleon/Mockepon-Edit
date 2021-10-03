@@ -14,13 +14,14 @@ import javax.swing.JPanel;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import cogs.Constants;
 import main.ComponentWindows;
+import main.Constants;
+import main.IComponentWindow;
 import main.Main;
 
 // ========================================================================== //
 
-public class GfxStockManager extends JFrame implements ActionListener, WindowListener {
+public class GfxStockManager extends JFrame implements ActionListener, WindowListener, IComponentWindow {
 	static final long serialVersionUID = 1L;
 
 	JTree  tree;
@@ -32,12 +33,12 @@ public class GfxStockManager extends JFrame implements ActionListener, WindowLis
 	// ====================================================================== //
 	
 	public GfxStockManager()  {
+		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		this.addWindowListener(this);
+		
 		this.setTitle("Mockepon Gfx Stock Manager");
 		this.setPreferredSize(new Dimension(800, 600));
 		this.setIconImage(Constants.PROJECT_ICON.getImage());
-		
-		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		this.addWindowListener(this);
 		
 		// .................................................................. //
 		// tree
@@ -153,6 +154,12 @@ public class GfxStockManager extends JFrame implements ActionListener, WindowLis
         book = new DefaultMutableTreeNode("The Java Language Specification");
         category.add(book);
     }
+
+	// ====================================================================== //
+	// Inter-Window Communication
+
+	@Override
+	public void preCloseActions() {}
 
 }
 

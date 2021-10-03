@@ -1,4 +1,4 @@
-package main;
+package launchWindow;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -13,15 +15,18 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import cogs.Constants;
 import gfxStockManager.GfxStockManager;
+import main.ComponentWindows;
+import main.Constants;
+import main.IComponentWindow;
+import main.Main;
 
 // ========================================================================== //
 
-public class LaunchWindow extends JFrame implements ActionListener {
+public class LaunchWindow extends JFrame implements ActionListener, WindowListener  {
 	static final long serialVersionUID = 0L;
 	
-	JFrame[] openWindows = new JFrame[ComponentWindows.Count.ordinal()];
+	IComponentWindow[] openWindows = new IComponentWindow[ComponentWindows.Count.ordinal()];
 	
 	JButton btnGfxStockManager;
 	JButton btnAnimationManager;
@@ -32,14 +37,13 @@ public class LaunchWindow extends JFrame implements ActionListener {
 	
 	// ====================================================================== //
 	
-	LaunchWindow () {
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	public LaunchWindow () {
+		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		this.addWindowListener(this);
 		
 		this.setTitle("Mockepon World Creator");
 		this.setLocation(300, 300);
-		
 		this.setPreferredSize(new Dimension(400, 300));
-		//this.setIconImage(Constants.PROJECT_ICON);
 		this.setIconImage(Constants.PROJECT_ICON.getImage());
 		
 		// .................................................................. //
@@ -86,6 +90,30 @@ public class LaunchWindow extends JFrame implements ActionListener {
 	     * ready before that so the ImageIcon is available for dialogs.
 	     */
 	}
+	
+	// ====================================================================== //
+	// WindowListener
+
+	@Override
+	public void windowClosing(WindowEvent arg0) { shutdown(); }
+	
+	@Override
+	public void windowActivated(WindowEvent arg0) {}
+
+	@Override
+	public void windowClosed(WindowEvent arg0) {}
+
+	@Override
+	public void windowDeactivated(WindowEvent arg0) {}
+
+	@Override
+	public void windowDeiconified(WindowEvent arg0) {}
+
+	@Override
+	public void windowIconified(WindowEvent arg0) {}
+
+	@Override
+	public void windowOpened(WindowEvent arg0) {}
 	
 	// ====================================================================== //
 	// ActionListener
@@ -136,7 +164,23 @@ public class LaunchWindow extends JFrame implements ActionListener {
 			
 		}
 
+		openWindows[ID.ordinal()].preCloseActions();
 		openWindows[ID.ordinal()].dispose();
 		openWindows[ID.ordinal()] = null;
+	}
+	
+	// ---------------------------------------------------------------------- //
+	
+	public void shutdown () {
+		for (IComponentWindow win : openWindows) {
+			if (win != null) {
+				win.preCloseActions();
+				win.dispose();
+			}
+		}
+		this.dispose();
+		
+		System.exit(0);
+		
 	}
 }

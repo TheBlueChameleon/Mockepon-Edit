@@ -1,4 +1,4 @@
-package cogs;
+package main;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -8,8 +8,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import org.ini4j.Wini;
-
-import main.Main;
 
 //=========================================================================== //
 

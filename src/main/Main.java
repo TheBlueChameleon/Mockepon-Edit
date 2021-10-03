@@ -4,13 +4,14 @@ import java.io.File;
 
 import javax.swing.JOptionPane;
 
-import cogs.Constants;
-import cogs.RuntimeGlobals;
+import launchWindow.LaunchWindow;
 
 // ========================================================================== //
 
 public class Main {
 	public static LaunchWindow mainWin = null;
+
+	// ====================================================================== //
 	
 	public static void main(String[] args) {
 		/* TODO
