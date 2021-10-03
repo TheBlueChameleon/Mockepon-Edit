@@ -20,17 +20,20 @@ import main.ComponentWindows;
 import main.Constants;
 import main.IComponentWindow;
 import main.Main;
+import optionsWindow.OptionsWindow;
 
 // ========================================================================== //
 
 public class LaunchWindow extends JFrame implements ActionListener, WindowListener  {
 	static final long serialVersionUID = 0L;
 	
-	IComponentWindow[] openWindows = new IComponentWindow[ComponentWindows.Count.ordinal()];
+	IComponentWindow[] openWindows = new IComponentWindow[ComponentWindows.values().length];
 	
 	JButton btnGfxStockManager;
 	JButton btnAnimationManager;
 	JButton btnTileManager;
+	
+	JButton btnOptions;
 	
 	JPanel content;
 	JLabel statusbar;
@@ -60,6 +63,9 @@ public class LaunchWindow extends JFrame implements ActionListener, WindowListen
 		btnTileManager = new JButton("Launch Tile Magager");
 		btnTileManager.addActionListener(this);
 		
+		btnOptions = new JButton("Options");
+		btnOptions.addActionListener(this);
+		
 		// .................................................................. //
 		// content panel
 		
@@ -71,6 +77,7 @@ public class LaunchWindow extends JFrame implements ActionListener, WindowListen
 		content.add(btnGfxStockManager);
 		content.add(btnAnimationManager);
 		content.add(btnTileManager);
+		content.add(btnOptions);
 		
 		// .................................................................. //
 		// status bar
@@ -124,6 +131,7 @@ public class LaunchWindow extends JFrame implements ActionListener, WindowListen
 		
 		if      (e.getSource() == btnGfxStockManager ) { openWindow(ComponentWindows.GfxStockManager); }
 		else if (e.getSource() == btnAnimationManager) { openWindow(ComponentWindows.AnimationManager); }
+		else if (e.getSource() == btnOptions         ) { openWindow(ComponentWindows.OptionsWindow); }
 	}
 	
 	// ====================================================================== //
@@ -137,6 +145,12 @@ public class LaunchWindow extends JFrame implements ActionListener, WindowListen
 			break;
 			
 		case AnimationManager :
+			break;
+			
+		
+		case OptionsWindow :
+			btnOptions.setEnabled(false);
+			openWindows[ID.ordinal()] = new OptionsWindow();
 			break;
 			
 		default:
@@ -159,6 +173,9 @@ public class LaunchWindow extends JFrame implements ActionListener, WindowListen
 			btnGfxStockManager.setEnabled(true);
 			
 		case AnimationManager :
+			
+		case OptionsWindow :
+			btnOptions.setEnabled(true);
 			
 		default:
 			

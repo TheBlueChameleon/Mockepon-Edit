@@ -24,6 +24,8 @@ import main.Main;
 public class GfxStockManager extends JFrame implements ActionListener, WindowListener, IComponentWindow {
 	static final long serialVersionUID = 1L;
 
+	static final ComponentWindows selfID = ComponentWindows.GfxStockManager;
+	
 	JTree  tree;
 	JPanel pnlCenter;
 	JPanel pnlButtons;
@@ -36,7 +38,7 @@ public class GfxStockManager extends JFrame implements ActionListener, WindowLis
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.addWindowListener(this);
 		
-		this.setTitle("Mockepon Gfx Stock Manager");
+		this.setTitle(Constants.PROJECT_NAME + " Gfx Stock Manager");
 		this.setPreferredSize(new Dimension(800, 600));
 		this.setIconImage(Constants.PROJECT_ICON.getImage());
 		
@@ -78,9 +80,7 @@ public class GfxStockManager extends JFrame implements ActionListener, WindowLis
 	// WindowListener
 
 	@Override
-	public void windowClosing(WindowEvent arg0) {
-		Main.mainWin.closeWindow(ComponentWindows.GfxStockManager);
-	}
+	public void windowClosing(WindowEvent arg0) {Main.mainWin.closeWindow(selfID);}
 	
 	@Override
 	public void windowActivated(WindowEvent arg0) {}
