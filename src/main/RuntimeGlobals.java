@@ -12,7 +12,8 @@ import org.ini4j.Wini;
 //=========================================================================== //
 
 public class RuntimeGlobals {
-	public static String workingDirectory;
+	public static String dirProject;
+	public static String dirGfx;
 
 	// ====================================================================== //
 
@@ -51,22 +52,21 @@ public class RuntimeGlobals {
 	        	System.exit(-1);
 	        }
 
-			workingDirectory = dlgDirectory.getSelectedFile().toString();
+			dirProject = dlgDirectory.getSelectedFile().toString();
 			triggerWrite = true;
 			
 			
 		} else {
-			workingDirectory = ini.get("project", "directory");
-			if (workingDirectory == null) {
-				workingDirectory = "./project";
+			dirProject = ini.get("project", "directory");
+			if (dirProject == null) {
+				dirProject = "./project";
 				triggerWrite = true;
 			}
 		}
 		
+		if (triggerWrite) {writeIni();}
 		
-		if (triggerWrite) {
-			writeIni();
-		}
+		dirGfx = new File(new File(dirProject), "gfx").toString();
 	}
 	
 	// .................................................................. //
@@ -78,7 +78,7 @@ public class RuntimeGlobals {
 			hFile = new FileWriter(Constants.INI_FILE);
 
 			hFile.write("[project]\n");
-			hFile.write("directory = " + workingDirectory + "\n");
+			hFile.write("directory = " + dirProject + "\n");
 			
 			hFile.close();
 			

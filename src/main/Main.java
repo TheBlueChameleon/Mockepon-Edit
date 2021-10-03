@@ -14,6 +14,25 @@ public class Main {
 	// ====================================================================== //
 	
 	public static void main(String[] args) {
+//		 final JFrame frame = new JFrame("Scroll Pane Example");  
+//		  
+//	        // Display the window.  
+//	        frame.setSize(500, 500);  
+//	        frame.setVisible(true);  
+//	        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
+//	  
+//	        // set flow layout for the frame  
+//	        frame.getContentPane().setLayout(new FlowLayout());  
+//	  
+//	        JTextArea textArea = new JTextArea(20, 20);  
+//	        JScrollPane scrollableTextArea = new JScrollPane(textArea);  
+//	  
+//	        scrollableTextArea.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);  
+//	        scrollableTextArea.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);  
+//	  
+//	        frame.getContentPane().add(scrollableTextArea);  
+	        
+	        
 		/* TODO
 		 * settings file
 		 * user-defined home directory, enabling multiple active proejcts 
@@ -28,13 +47,13 @@ public class Main {
 		
 		mainWin.setVisible(true);
 		
-//		new GfxStockManager(null);
+		mainWin.openWindow(ComponentWindows.GfxStockManager);
 	}
 
 	// ====================================================================== //
 	
 	static void guaranteeSubfolderStructure() {
-		File directory = new File(RuntimeGlobals.workingDirectory);
+		File directory = new File(RuntimeGlobals.dirProject);
 		File directorySub;
 		
 		if (!directory.exists()) {
@@ -42,7 +61,7 @@ public class Main {
 			int createFlag = JOptionPane.showOptionDialog(
 					mainWin,
 					"The indicated project path '" +
-							RuntimeGlobals.workingDirectory +
+							RuntimeGlobals.dirProject +
 							"' does not exist.\n" + 
 							"Create?",
 					Constants.PROJECT_NAME,

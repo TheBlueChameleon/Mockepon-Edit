@@ -7,17 +7,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.File;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 
 import main.ComponentWindows;
 import main.Constants;
 import main.IComponentWindow;
 import main.Main;
+import main.RuntimeGlobals;
 
 // ========================================================================== //
 
@@ -26,7 +30,9 @@ public class GfxStockManager extends JFrame implements ActionListener, WindowLis
 
 	static final ComponentWindows selfID = ComponentWindows.GfxStockManager;
 	
-	JTree  tree;
+	JTree       tree;
+	JScrollPane scrTree;
+	
 	JPanel pnlCenter;
 	JPanel pnlButtons;
 	
@@ -40,20 +46,23 @@ public class GfxStockManager extends JFrame implements ActionListener, WindowLis
 		
 		this.setTitle(Constants.PROJECT_NAME + " Gfx Stock Manager");
 		this.setPreferredSize(new Dimension(800, 600));
+		this.setLocationByPlatform(true);
 		this.setIconImage(Constants.PROJECT_ICON.getImage());
 		
 		// .................................................................. //
 		// tree
 		
-		DefaultMutableTreeNode top = new DefaultMutableTreeNode("The Java Series");
-		createNodes(top);
-		tree = new JTree(top);
+		makeTree();
+		scrTree = new JScrollPane(tree);
+		scrTree.setPreferredSize(new Dimension(200, 0));
+		scrTree.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		
 		// .................................................................. //
 		// panels
 		
 		pnlButtons = new JPanel();
 		pnlButtons.setBackground(Color.black);
+		
 		pnlCenter  = new JPanel();
 		pnlCenter.setBackground(Color.blue);
 		
@@ -67,7 +76,7 @@ public class GfxStockManager extends JFrame implements ActionListener, WindowLis
 		// .................................................................. //
 		// packing
 		
-		this.add(tree      , BorderLayout.WEST);
+		this.add(scrTree   , BorderLayout.WEST);
 		this.add(pnlCenter , BorderLayout.CENTER);
 		this.add(pnlButtons, BorderLayout.EAST);
 		this.add(statusbar , BorderLayout.SOUTH);
@@ -80,7 +89,7 @@ public class GfxStockManager extends JFrame implements ActionListener, WindowLis
 	// WindowListener
 
 	@Override
-	public void windowClosing(WindowEvent arg0) {Main.mainWin.closeWindow(selfID);}
+	public void windowClosing(WindowEvent arg0) {Main.mainWin.closeWindow(selfID); Main.mainWin.shutdown();}
 	
 	@Override
 	public void windowActivated(WindowEvent arg0) {}
@@ -112,49 +121,30 @@ public class GfxStockManager extends JFrame implements ActionListener, WindowLis
 	// ====================================================================== //
 	// Tree
 	
-	private void createNodes(DefaultMutableTreeNode top) {
-        DefaultMutableTreeNode category = null;
-        DefaultMutableTreeNode book = null;
-
-        category = new DefaultMutableTreeNode("Books for Java Programmers");
-        top.add(category);
-
-        //original Tutorial
-        book = new DefaultMutableTreeNode("The Java Tutorial: A Short Course on the Basics");
-        category.add(book);
-
-        //Tutorial Continued
-        book = new DefaultMutableTreeNode("The Java Tutorial Continued: The Rest of the JDK");
-        category.add(book);
-
-        //JFC Swing Tutorial
-        book = new DefaultMutableTreeNode("The JFC Swing Tutorial: A Guide to Constructing GUIs");
-        category.add(book);
-
-        //Bloch
-        book = new DefaultMutableTreeNode("Effective Java Programming Language Guide");
-        category.add(book);
-
-        //Arnold/Gosling
-        book = new DefaultMutableTreeNode("The Java Programming Language");
-        category.add(book);
-
-        //Chan
-        book = new DefaultMutableTreeNode("The Java Developers Almanac");
-        category.add(book);
-
-        category = new DefaultMutableTreeNode("Books for Java Implementers");
-        top.add(category);
-
-        //VM
-        book = new DefaultMutableTreeNode("The Java Virtual Machine Specification");
-        category.add(book);
-
-        //Language Spec
-        book = new DefaultMutableTreeNode("The Java Language Specification");
-        category.add(book);
+	private void makeTree() {
+        File                   fileRoot  = new File( RuntimeGlobals.dirGfx );
+        DefaultMutableTreeNode root      = new DefaultMutableTreeNode(new FileNode(fileRoot));
+        DefaultTreeModel       treeModel = new DefaultTreeModel(root);
+        
+        tree = new JTree(treeModel);
+        tree.setShowsRootHandles(true);
+        
+        createChildren(fileRoot, root);
     }
+	
+	private void createChildren(File fileRoot, DefaultMutableTreeNode node) {
+        File[] files = fileRoot.listFiles();
+        if (files == null) return;
 
+        for (File file : files) {
+            DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(new FileNode(file));
+            node.add(childNode);
+            if (file.isDirectory()) {
+                createChildren(file, childNode);
+            }
+        }
+    }
+	
 	// ====================================================================== //
 	// Inter-Window Communication
 
@@ -162,5 +152,3 @@ public class GfxStockManager extends JFrame implements ActionListener, WindowLis
 	public void preCloseActions() {}
 
 }
-
-

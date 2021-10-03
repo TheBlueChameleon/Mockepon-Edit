@@ -63,7 +63,7 @@ public class OptionsWindow extends JFrame implements IComponentWindow, ActionLis
 		lblWorkingDirectory = new JLabel("Project Directory");
 		
 		txtWorkingDirectory = new JTextField();// + RuntimeGlobals.workingDirectory);
-		txtWorkingDirectory.setText(RuntimeGlobals.workingDirectory);
+		txtWorkingDirectory.setText(RuntimeGlobals.dirProject);
 		txtWorkingDirectory.setPreferredSize(new Dimension(400, 20));
 		txtWorkingDirectory.setEditable(false);
 		
@@ -188,13 +188,13 @@ public class OptionsWindow extends JFrame implements IComponentWindow, ActionLis
 	// Internal Logic
 	
 	void updateRuntimeGlobals() {
-		RuntimeGlobals.workingDirectory = txtWorkingDirectory.getText(); 
+		RuntimeGlobals.dirProject = txtWorkingDirectory.getText(); 
 	}
 	
 	// ...................................................................... //
 	
 	void resetFields () {
-		txtWorkingDirectory.setText( RuntimeGlobals.workingDirectory );
+		txtWorkingDirectory.setText( RuntimeGlobals.dirProject );
 	}
 	
 	// ---------------------------------------------------------------------- //
@@ -203,7 +203,7 @@ public class OptionsWindow extends JFrame implements IComponentWindow, ActionLis
 		JFileChooser dlgDirectory = new JFileChooser();
 		dlgDirectory.setDialogTitle(Constants.PROJECT_NAME + " – Select Project Directory");
         dlgDirectory.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        dlgDirectory.setCurrentDirectory(new File(RuntimeGlobals.workingDirectory));
+        dlgDirectory.setCurrentDirectory(new File(RuntimeGlobals.dirProject));
         
         if (dlgDirectory.showOpenDialog(this) == 0) {
         	changed = true;
